@@ -19,8 +19,8 @@ object CoroutineService {
 
 class KotestTesting: FunSpec() {
   init {
-    test("Test with service that fails withTimeout says that it times out in 10 min instead of 10ms") {
-        CoroutineService.coroutineThatTimesOut(10.milliseconds)
+    test("Test with service that fails withTimeout says that it times out in 10 min instead of 15ms") {
+        CoroutineService.coroutineThatTimesOut(15.milliseconds)
     }
   }
 }
