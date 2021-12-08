@@ -1,13 +1,26 @@
 package dev.kotest.testing
 
 import io.kotest.core.spec.style.FunSpec
-import kotlin.time.Duration.Companion.minutes
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withTimeout
+import kotlin.time.Duration
+import kotlin.time.Duration.Companion.milliseconds
 
+
+object CoroutineService {
+  suspend fun coroutineThatTimesOut(timeout: Duration) =
+    withTimeout(timeout.inWholeMilliseconds) {
+      launch {
+        val sleepTime = timeout.plus(10.milliseconds)
+        Thread.sleep(sleepTime.inWholeMilliseconds)
+      }.join()
+    }
+}
 
 class KotestTesting: FunSpec() {
   init {
-    xtest("This will pass if project actually has a higher default than 10 mintues") {
-      Thread.sleep(11.minutes.inWholeMilliseconds)
+    test("Test with service that fails withTimeout says that it times out in 10 min instead of 10ms") {
+        CoroutineService.coroutineThatTimesOut(10.milliseconds)
     }
   }
 }
